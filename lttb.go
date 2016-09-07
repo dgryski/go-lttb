@@ -25,31 +25,25 @@ func LTTB(data []Point, threshold int) []Point {
 	var sampled []Point
 
 	// Bucket size. Leave room for start and end data points
-	var every = float64(len(data)-2) / float64(threshold-2)
+	every := float64(len(data)-2) / float64(threshold-2)
 
-	var (
-		a      int // Initially a is the first point in the triangle
-		next_a int
-	)
+	sampled = append(sampled, data[0]) // Always add the first point
 
-	sampled = append(sampled, data[a]) // Always add the first point
+	var a int
 
 	for i := 0; i < threshold-2; i++ {
 
 		// Calculate point average for next bucket (containing c)
-		var (
-			avg_x           float64
-			avg_y           float64
-			avg_range_start = int(math.Floor(float64(i+1)*every) + 1)
-			avg_range_end   = int(math.Floor(float64(i+2)*every) + 1)
-		)
+		avg_range_start := int(math.Floor(float64(i+1)*every) + 1)
+		avg_range_end := int(math.Floor(float64(i+2)*every) + 1)
 
 		if avg_range_end >= len(data) {
 			avg_range_end = len(data)
 		}
 
-		var avg_range_length = float64(avg_range_end - avg_range_start)
+		avg_range_length := float64(avg_range_end - avg_range_start)
 
+		var avg_x, avg_y float64
 		for ; avg_range_start < avg_range_end; avg_range_start++ {
 			avg_x += data[avg_range_start].X
 			avg_y += data[avg_range_start].Y
@@ -58,17 +52,18 @@ func LTTB(data []Point, threshold int) []Point {
 		avg_y /= avg_range_length
 
 		// Get the range for this bucket
-		var range_offs = int(math.Floor(float64(i+0)*every) + 1)
-		var range_to = int(math.Floor(float64(i+1)*every) + 1)
+		range_offs := int(math.Floor(float64(i+0)*every) + 1)
+		range_to := int(math.Floor(float64(i+1)*every) + 1)
 
 		// Point a
-		var point_a_x = data[a].X
-		var point_a_y = data[a].Y
+		point_a_x := data[a].X
+		point_a_y := data[a].Y
 
 		var max_area float64
 		var area float64
 		var max_area_point Point
 
+		var next_a int
 		for ; range_offs < range_to; range_offs++ {
 			// Calculate triangle area over three buckets
 			area = math.Abs((point_a_x-avg_x)*(data[range_offs].Y-point_a_y)-
