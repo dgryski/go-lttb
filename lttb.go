@@ -37,49 +37,49 @@ func LTTB(data []Point, threshold int) []Point {
 	for i := 0; i < threshold-2; i++ {
 
 		// Calculate point average for next bucket (containing c)
-		avg_range_start := int(math.Floor(float64(i+1)*every) + 1)
-		avg_range_end := int(math.Floor(float64(i+2)*every) + 1)
+		avgRangeStart := int(math.Floor(float64(i+1)*every) + 1)
+		avgRangeEnd := int(math.Floor(float64(i+2)*every) + 1)
 
-		if avg_range_end >= len(data) {
-			avg_range_end = len(data)
+		if avgRangeEnd >= len(data) {
+			avgRangeEnd = len(data)
 		}
 
-		avg_range_length := float64(avg_range_end - avg_range_start)
+		avgRangeLength := float64(avgRangeEnd - avgRangeStart)
 
-		var avg_x, avg_y float64
-		for ; avg_range_start < avg_range_end; avg_range_start++ {
-			avg_x += data[avg_range_start].X
-			avg_y += data[avg_range_start].Y
+		var avgX, avgY float64
+		for ; avgRangeStart < avgRangeEnd; avgRangeStart++ {
+			avgX += data[avgRangeStart].X
+			avgY += data[avgRangeStart].Y
 		}
-		avg_x /= avg_range_length
-		avg_y /= avg_range_length
+		avgX /= avgRangeLength
+		avgY /= avgRangeLength
 
 		// Get the range for this bucket
-		range_offs := int(math.Floor(float64(i+0)*every) + 1)
-		range_to := int(math.Floor(float64(i+1)*every) + 1)
+		rangeOffs := int(math.Floor(float64(i+0)*every) + 1)
+		rangeTo := int(math.Floor(float64(i+1)*every) + 1)
 
 		// Point a
-		point_a_x := data[a].X
-		point_a_y := data[a].Y
+		pointAX := data[a].X
+		pointAY := data[a].Y
 
-		var max_area float64
+		var maxArea float64
 		var area float64
-		var max_area_point Point
+		var maxAreaPoint Point
 
-		var next_a int
-		for ; range_offs < range_to; range_offs++ {
+		var nextA int
+		for ; rangeOffs < rangeTo; rangeOffs++ {
 			// Calculate triangle area over three buckets
-			area = math.Abs((point_a_x-avg_x)*(data[range_offs].Y-point_a_y)-
-				(point_a_x-data[range_offs].X)*(avg_y-point_a_y)) * 0.5
-			if area > max_area {
-				max_area = area
-				max_area_point = data[range_offs]
-				next_a = range_offs // Next a is this b
+			area = math.Abs((pointAX-avgX)*(data[rangeOffs].Y-pointAY)-
+				(pointAX-data[rangeOffs].X)*(avgY-pointAY)) * 0.5
+			if area > maxArea {
+				maxArea = area
+				maxAreaPoint = data[rangeOffs]
+				nextA = rangeOffs // Next a is this b
 			}
 		}
 
-		sampled = append(sampled, max_area_point) // Pick this point from the bucket
-		a = next_a                                // This a is the next a (chosen b)
+		sampled = append(sampled, maxAreaPoint) // Pick this point from the bucket
+		a = nextA                               // This a is the next a (chosen b)
 	}
 
 	sampled = append(sampled, data[len(data)-1]) // Always add last
