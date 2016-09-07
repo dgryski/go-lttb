@@ -11,11 +11,14 @@ package lttb
 
 import "math"
 
+// Point is a point on a line
 type Point struct {
 	X float64
 	Y float64
 }
 
+// LTTB down-samples the data to contain only threshold number of points that
+// have the same visual shape as the original data
 func LTTB(data []Point, threshold int) []Point {
 
 	if threshold >= len(data) || threshold == 0 {
