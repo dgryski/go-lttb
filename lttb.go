@@ -18,16 +18,14 @@ type Point struct {
 
 func LTTB(data []Point, threshold int) []Point {
 
-	data_length := len(data)
-
-	if threshold >= data_length || threshold == 0 {
+	if threshold >= len(data) || threshold == 0 {
 		return data // Nothing to do
 	}
 
 	var sampled []Point
 
 	// Bucket size. Leave room for start and end data points
-	var every = float64(data_length-2) / float64(threshold-2)
+	var every = float64(len(data)-2) / float64(threshold-2)
 
 	var (
 		a      int = 0 // Initially a is the first point in the triangle
@@ -46,8 +44,8 @@ func LTTB(data []Point, threshold int) []Point {
 			avg_range_end   int     = int(math.Floor(float64(i+2)*every) + 1)
 		)
 
-		if avg_range_end >= data_length {
-			avg_range_end = data_length
+		if avg_range_end >= len(data) {
+			avg_range_end = len(data)
 		}
 
 		var avg_range_length = float64(avg_range_end - avg_range_start)
@@ -86,7 +84,7 @@ func LTTB(data []Point, threshold int) []Point {
 		a = next_a                                // This a is the next a (chosen b)
 	}
 
-	sampled = append(sampled, data[data_length-1]) // Always add last
+	sampled = append(sampled, data[len(data)-1]) // Always add last
 
 	return sampled
 }
