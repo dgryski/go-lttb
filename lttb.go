@@ -68,12 +68,11 @@ func LTTB(data []Point, threshold int) []Point {
 		pointAY := data[a].Y
 
 		var maxArea float64
-		var area float64
 
 		var nextA int
 		for ; rangeOffs < rangeTo; rangeOffs++ {
 			// Calculate triangle area over three buckets
-			area = math.Abs((pointAX-avgX)*(data[rangeOffs].Y-pointAY) - (pointAX-data[rangeOffs].X)*(avgY-pointAY))
+			area := math.Abs((pointAX-avgX)*(data[rangeOffs].Y-pointAY) - (pointAX-data[rangeOffs].X)*(avgY-pointAY))
 			if area > maxArea {
 				maxArea = area
 				nextA = rangeOffs // Next a is this b
