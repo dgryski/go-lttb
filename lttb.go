@@ -32,13 +32,18 @@ func LTTB(data []Point, threshold int) []Point {
 
 	sampled = append(sampled, data[0]) // Always add the first point
 
+	bucketStart := 0
+	bucketCenter := int(math.Floor(every) + 1)
+
 	var a int
 
 	for i := 0; i < threshold-2; i++ {
 
+		bucketEnd := int(math.Floor(float64(i+2)*every) + 1)
+
 		// Calculate point average for next bucket (containing c)
-		avgRangeStart := int(math.Floor(float64(i+1)*every) + 1)
-		avgRangeEnd := int(math.Floor(float64(i+2)*every) + 1)
+		avgRangeStart := bucketCenter
+		avgRangeEnd := bucketEnd
 
 		if avgRangeEnd >= len(data) {
 			avgRangeEnd = len(data)
@@ -55,8 +60,8 @@ func LTTB(data []Point, threshold int) []Point {
 		avgY /= avgRangeLength
 
 		// Get the range for this bucket
-		rangeOffs := int(math.Floor(float64(i+0)*every) + 1)
-		rangeTo := int(math.Floor(float64(i+1)*every) + 1)
+		rangeOffs := bucketStart
+		rangeTo := bucketCenter
 
 		// Point a
 		pointAX := data[a].X
@@ -80,6 +85,9 @@ func LTTB(data []Point, threshold int) []Point {
 
 		sampled = append(sampled, maxAreaPoint) // Pick this point from the bucket
 		a = nextA                               // This a is the next a (chosen b)
+
+		bucketStart = bucketCenter
+		bucketCenter = bucketEnd
 	}
 
 	sampled = append(sampled, data[len(data)-1]) // Always add last
