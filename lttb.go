@@ -69,7 +69,6 @@ func LTTB(data []Point, threshold int) []Point {
 
 		var maxArea float64
 		var area float64
-		var maxAreaPoint Point
 
 		var nextA int
 		for ; rangeOffs < rangeTo; rangeOffs++ {
@@ -78,13 +77,12 @@ func LTTB(data []Point, threshold int) []Point {
 				(pointAX-data[rangeOffs].X)*(avgY-pointAY)) * 0.5
 			if area > maxArea {
 				maxArea = area
-				maxAreaPoint = data[rangeOffs]
 				nextA = rangeOffs // Next a is this b
 			}
 		}
 
-		sampled = append(sampled, maxAreaPoint) // Pick this point from the bucket
-		a = nextA                               // This a is the next a (chosen b)
+		sampled = append(sampled, data[nextA]) // Pick this point from the bucket
+		a = nextA                              // This a is the next a (chosen b)
 
 		bucketStart = bucketCenter
 		bucketCenter = bucketEnd
