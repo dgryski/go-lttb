@@ -25,7 +25,7 @@ func LTTB(data []Point, threshold int) []Point {
 		return data // Nothing to do
 	}
 
-	var sampled []Point
+	sampled := make([]Point, 0, threshold)
 
 	// Bucket size. Leave room for start and end data points
 	every := float64(len(data)-2) / float64(threshold-2)
