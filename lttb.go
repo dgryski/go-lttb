@@ -9,7 +9,9 @@ This is a translation of the javascript code at
 */
 package lttb
 
-import "math"
+import (
+	"math"
+)
 
 // Point is a point on a line
 type Point struct {
@@ -72,7 +74,11 @@ func LTTB(data []Point, threshold int) []Point {
 		var nextA int
 		for ; rangeOffs < rangeTo; rangeOffs++ {
 			// Calculate triangle area over three buckets
-			area := math.Abs((pointAX-avgX)*(data[rangeOffs].Y-pointAY) - (pointAX-data[rangeOffs].X)*(avgY-pointAY))
+			area := (pointAX-avgX)*(data[rangeOffs].Y-pointAY) - (pointAX-data[rangeOffs].X)*(avgY-pointAY)
+			// We only care about the relative area here.
+			// But area might be negative, so we *could* call math.Abs(), but that turns out to be slower than just squaring.
+			// Remove when https://github.com/golang/go/issues/13095 is fixed.
+			area *= area
 			if area > maxArea {
 				maxArea = area
 				nextA = rangeOffs // Next a is this b
