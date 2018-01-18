@@ -76,8 +76,7 @@ func LTTB(data []Point, threshold int) []Point {
 			// Calculate triangle area over three buckets
 			area := (pointAX-avgX)*(data[rangeOffs].Y-pointAY) - (pointAX-data[rangeOffs].X)*(avgY-pointAY)
 			// We only care about the relative area here.
-			// But area might be negative, so we *could* call math.Abs(), but that turns out to be slower than just squaring.
-			// Remove when https://github.com/golang/go/issues/13095 is fixed.
+			// Calling math.Abs() is slower than squaring
 			area *= area
 			if area > maxArea {
 				maxArea = area
