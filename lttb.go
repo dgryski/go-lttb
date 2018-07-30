@@ -69,7 +69,7 @@ func LTTB(data []Point, threshold int) []Point {
 		pointAX := data[a].X
 		pointAY := data[a].Y
 
-		var maxArea float64
+		maxArea := -1.0
 
 		var nextA int
 		for ; rangeOffs < rangeTo; rangeOffs++ {
