@@ -34,7 +34,7 @@ func LTTB(data []Point, threshold int) []Point {
 
 	sampled = append(sampled, data[0]) // Always add the first point
 
-	bucketStart := 0
+	bucketStart := 1
 	bucketCenter := int(math.Floor(every)) + 1
 
 	var a int
