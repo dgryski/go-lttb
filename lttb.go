@@ -11,23 +11,28 @@ package lttb
 
 import (
 	"math"
+
+	"golang.org/x/exp/constraints"
 )
 
 // Point is a point on a line
-type Point struct {
-	X float64
-	Y float64
+type Point[T constraints.Float] struct {
+	X T
+	Y T
 }
 
 // LTTB down-samples the data to contain only threshold number of points that
 // have the same visual shape as the original data
-func LTTB(data []Point, threshold int) []Point {
+func LTTB[T constraints.Float](data []Point[T], threshold int) []Point[T] {
+	if threshold < 3 {
+		threshold = 3
+	}
 
-	if threshold >= len(data) || threshold == 0 {
+	if threshold >= len(data) {
 		return data // Nothing to do
 	}
 
-	sampled := make([]Point, 0, threshold)
+	sampled := make([]Point[T], 0, threshold)
 
 	// Bucket size. Leave room for start and end data points
 	every := float64(len(data)-2) / float64(threshold-2)
@@ -51,9 +56,9 @@ func LTTB(data []Point, threshold int) []Point {
 			avgRangeEnd = len(data)
 		}
 
-		avgRangeLength := float64(avgRangeEnd - avgRangeStart)
+		avgRangeLength := T(avgRangeEnd - avgRangeStart)
 
-		var avgX, avgY float64
+		var avgX, avgY T
 		for ; avgRangeStart < avgRangeEnd; avgRangeStart++ {
 			avgX += data[avgRangeStart].X
 			avgY += data[avgRangeStart].Y
@@ -69,7 +74,7 @@ func LTTB(data []Point, threshold int) []Point {
 		pointAX := data[a].X
 		pointAY := data[a].Y
 
-		maxArea := -1.0
+		maxArea := T(-1.0)
 
 		var nextA int
 		for ; rangeOffs < rangeTo; rangeOffs++ {

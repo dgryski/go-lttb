@@ -9,7 +9,7 @@ import (
 // correct selection of a "b" point in a bucket where all computed
 // areas have a value of zero.
 func TestPointSelectionWithZeroArea(t *testing.T) {
-	data := []Point{
+	data := []Point[float64]{
 		{0, 0}, // sentinel value
 		{1299456, 116.3707},
 		{1300320, 116.3752}, // a
@@ -20,7 +20,7 @@ func TestPointSelectionWithZeroArea(t *testing.T) {
 		{1307232, 116.2676},
 	}
 
-	want := []Point{
+	want := []Point[float64]{
 		{0, 0},
 		{1299456, 116.3707},
 		{1300320, 116.3752},
