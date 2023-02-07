@@ -1,4 +1,4 @@
-module github.com/atuleu/go-lttb
+module github.com/dgryski/go-lttb
 
 go 1.19
 
